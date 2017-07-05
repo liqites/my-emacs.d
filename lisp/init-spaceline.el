@@ -1,3 +1,5 @@
+(require-package 'spaceline)
+
 (require 'spaceline)
 (require 'spaceline-segments)
 (require 'spaceline-config)

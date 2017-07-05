@@ -1,3 +1,6 @@
 elpa/
 auto-save-list/
 *.*~
+*.dat*
+*.eld
+.his*

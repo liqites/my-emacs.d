@@ -1,4 +1,7 @@
 (when (maybe-require-package 'projectile)
+  
+  (add-hook 'ruby-mode-hook 'projectile-mode)
+  
   (add-hook 'after-init-hook 'projectile-global-mode)
 
   ;; The following code means you get a menu if you hit "C-c p" and wait
