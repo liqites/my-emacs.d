@@ -18,8 +18,12 @@
 (require 'init-ivy)
 (require 'init-ido)
 (require 'init-projectile)
+(require 'init-rails)
 (require 'init-spaceline)
 (require 'init-auto-complete)
+
+;;
+(require 'init-ruby-mode)
 
 ;;=======
 
