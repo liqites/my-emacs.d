@@ -14,6 +14,7 @@
 (require 'init-editor)
 (require 'init-themes)
 (require 'init-fonts)
+;; (require 'init-mmmm)
 
 (require 'init-ivy)
 (require 'init-ido)
@@ -23,7 +24,7 @@
 (require 'init-auto-complete)
 
 ;;
-(require 'init-ruby-mode)
+;; (require 'init-ruby-mode)
 
 ;;=======
 

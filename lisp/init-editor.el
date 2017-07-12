@@ -13,4 +13,7 @@
 (setq tab-width 2)
 (setq-default tab-stop-list (number-sequence 4 120 4))
 
+;; shortcut
+(global-set-key (kbd "C-M-\;") 'comment-line)
+
 (provide 'init-editor)
