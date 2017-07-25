@@ -22,6 +22,7 @@
 (require 'init-rails)
 (require 'init-spaceline)
 (require 'init-auto-complete)
+(require 'init-smooth-scrolling)
 
 ;;
 ;; (require 'init-ruby-mode)
