@@ -25,26 +25,23 @@ There are two things you can do about this warning:
 
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-;; (load "~/.emacs.d/init-packages")
-
-;; (require 'init-utils)
 
 (require 'init-elpa)
-;; (require 'init-editor)
-;; (require 'init-themes)
-;; (require 'init-fonts)
-;; (require 'init-mmmm)
+(require 'init-dired-sidebar)
+(require 'init-theme-monokai)
+(require 'init-ido-mode)
+(require 'init-projectile)
+(require 'init-ivy-mode)
+(require 'init-flycheck)
+(require 'init-company-mode)
+(require 'init-lsp-mode)
+(require 'init-web-mode)
+(require 'init-fonts)
+(require 'init-frames)
+(require 'init-formatter)
+;; (require 'init-lsp-ui)
 
-;; (require 'init-ivy)
-;; (require 'init-ido)
-;; (require 'init-projectile)
-;; (require 'init-rails)
-;; (require 'init-spaceline)
-;; (require 'init-auto-complete)
-;; (require 'init-smooth-scrolling)
-
-;;
-;; (require 'init-ruby-mode)
+(load-theme 'monokai t)
 
 ;;=======
 
@@ -66,7 +63,9 @@ There are two things you can do about this warning:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (use-package))))
+ '(package-selected-packages
+   (quote
+    (format-all web-mode ivy direc-sidebar dired-sidebar use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
