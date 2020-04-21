@@ -1,5 +1,8 @@
+
+;;; init-epla.el --- Initialize Elpa Packages
 ;;; On-demand installation of packages
 
+;;; Code:
 (defun require-package (package &optional min-version no-refresh)
   "Install given PACKAGE, optionally requiring MIN-VERSION.
 If NO-REFRESH is non-nil, the available package lists will not be
@@ -28,3 +31,5 @@ lists will not be re-download in order to locate PACKAGE."
      nil)))
 
 (provide 'init-elpa)
+
+;;; init-elpa.el ends here

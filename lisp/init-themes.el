@@ -1,20 +1,24 @@
-;; (require-package 'dash)
-;; (require-package 'solarized-theme)
+;; (require-package 'dracula-theme)
+;; (load-theme 'dracula t)
 
-;; (require 'solarized)
+;;; Theme Ample ---
+;; (use-package ample-theme
+;;   :init (progn (load-theme 'ample t t)
+;;                (load-theme 'ample-flat t t)
+;;                (load-theme 'ample-light t t)
+;;                (enable-theme 'ample-light))
+;;   :defer t
+;;   :ensure t)
 
-;; (deftheme solarized-dark "The dark variant of the Solarized colour theme")
+;;; Theme Afternoon ---
+;; (use-package afternoon-theme
+;;   :init (progn (load-theme 'afternoon t))
+;;   :defer t
+;;   :ensure t)
 
-;; (create-solarized-theme 'dark 'solarized-dark)
-
-;; (provide-theme 'solarized-dark)
-
-;; (when (maybe-require-package 'monokai-theme)
-;;   (load-theme 'monokai t)
-;;  )
-
-(require-package 'dracula-theme)
-(load-theme 'dracula t)
-
+(use-package spacemacs-theme
+  :init (progn (load-theme 'spacemacs-light t))
+  :defer t
+  :ensure t)
 
 (provide 'init-themes)

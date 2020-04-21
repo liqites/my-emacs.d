@@ -6,4 +6,5 @@ auto-save-list/
 .his*
 **/#*
 .#*
-ido.lasst
+ido.last
+transient/*

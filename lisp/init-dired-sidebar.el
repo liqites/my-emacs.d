@@ -1,3 +1,11 @@
+;;; init-dired-sidebar --- Summary
+;;; Ci:
+
+;;; Code :
+;; (use-package vscode-icon
+  ;; :ensure t
+  ;; :commands (vscode-icon-for-file))
+
 (use-package dired-sidebar
   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :ensure t
