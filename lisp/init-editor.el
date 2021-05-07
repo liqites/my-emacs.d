@@ -9,7 +9,7 @@
 
 ;; Font
 (add-to-list 'default-frame-alist
-	     '(font . "JetBrains Mono"))
+	     '(font . "Input Serif Narrow"))
 (set-face-attribute 'default nil :height 130)
 
 ;; Themes
@@ -21,18 +21,22 @@
 ; Atom One Dark Theme
 ;; (use-package atom-one-dark-theme
   ;; :ensure t)
-;; (load-theme 'atom-one-dark t t)
+;; (load-tnnheme 'atom-one-dark t t)
 ;; (enable-theme 'atom-one-dark)
 
 ;; Hide Toolbar
 (tool-bar-mode -1)
 
 ;; Spacemacs Theme
-;; (use-package spacemacs-theme
-  ;; :ensure t)
+(use-package spacemacs-theme
+  :init (progn (load-theme 'spacemacs-dark t))
+  :defer t
+  :ensure t)
 
 ;; Smooth Scroll
-;; (use-package smooth-scrolling)
+;; (use-package smooth-scrolling
+;;   :ensure t
+;;   )
 ;; (smooth-scrolling-mode 1)
 
 (setq-default tab-width 3)
@@ -46,8 +50,10 @@
 
 ;; Cursor Type
 (setq-default cursor-type 'bar)
-(set-cursor-color "#FF9800") 
+(set-cursor-color "#FF9800")
 
+
+(setq inhibit-startup-echo-area-message "YOUR-USER-NAME")
 
 
 (provide 'init-editor)

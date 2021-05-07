@@ -1,0 +1,292 @@
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+;; (package-initialize)
+
+;;
+(load "~/.emacs.d/init-packages")
+
+;; MELPA
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  (when no-ssl (warn "\
+Your version of Emacs does not support SSL connections,
+which is unsafe because it allows man-in-the-middle attacks.
+There arsze two things you can do about this warning:
+1. Install an Emacs version that does support SSL and be safe.
+2. Remove this warning from your init file so you won't see it again."))
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  )
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+;; (require 'init-benchmarking)
+
+;; (defconst *spell-check-support-enabled* nil) ;; Enable with t if you prefer
+;; (defconst *is-a-mac* (eq system-type 'darwin))
+
+;; (let ((normal-gc-cons-threshold (* 20 1024 1024))
+;;       (init-gc-cons-threshold (* 128 1024 1024)))
+;;   (setq gc-cons-threshold init-gc-cons-threshold)
+;;   (add-hook 'emacs-startup-hook
+;;             (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+
+;; (setq package-selected-packages
+;;       '(use-package))
+;; (package-install-selected-packages)
+
+(package-initialize)
+
+;; (require 'init-elpa)
+(defun require-package (package &optional min-version no-refresh)
+  "Install given PACKAGE, optionally requiring MIN-VERSION.
+If NO-REFRESH is non-nil, the available package lists will not be
+re-downloaded in order to locate PACKAGE."
+  (if (package-installed-p package min-version)
+      t
+    (if (or (assoc package package-archive-contents) no-refresh)
+        (if (boundp 'package-selected-packages)
+            ;; Record this as a package the user installed explicitly
+            (package-install package nil)
+          (package-install package))
+      (progn
+        (package-refresh-contents)
+        (require-package package min-version t)))))
+
+
+(defun maybe-require-package (package &optional min-version no-refresh)
+  "Try to install PACKAGE, and return non-nil if successfull.
+In the event of failure, return nil and print a warning message.
+Optionally require MIN-VERSION. if NO-REFRESH is non-nil, the available package
+lists will not be re-download in order to locate PACKAGE."
+  (condition-case err
+      (require-package package min-version no-refresh)
+    (error
+     (message "Couldn't install optional package `%s` : `%S`" package err)
+     nil)))
+
+;;=============
+;; dired-sidebar --- Sidebar for Emacs leveraging Dired
+;; (require 'init-dired-sidebar)
+;;=============
+;; Code:
+(use-package dired-sidebar
+  :bind (
+			("C-x C-n" . dired-sidebar-toggle-sidebar) ;; Keybindings to show dired-sidebar
+			)
+  :ensure t
+  :commands (dired-sidebar-toggle-sidebar)
+  :init
+  (add-hook 'dired-sidebar-mode-hook
+            (lambda ()
+              (unless (file-remote-p default-directory)
+                (auto-revert-mode))))
+  :config
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+
+  (setq dired-sidebar-subtree-line-prefix "__")
+  ;; (setq dired-sidebar-theme 'vscode)
+  (setq dired-sidebar-use-term-integration t)
+  (setq dired-sidebar-use-custom-font t))
+
+
+;;=============
+;; Interactive Ido Mode
+;; This file documents the Ido package for GNU Emacs.
+;; (require 'init-ido-mode)
+;;=============
+;; Code:
+(use-package ido
+  :ensure t
+  :defer t
+  :config
+  (setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (setq ido-use-filename-at-point 'guess)
+  (setq ido-create-new-buffer 'always)
+  :init
+  (ido-mode t) ;; 像这样的初始化函数调用，需放在 :init 中
+  )
+
+
+;; (require 'init-projectile)
+(use-package projectile
+  :ensure t
+  :defer t
+  :config
+  (projectile-mode t)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+;; (require 'init-ivy-mode)
+(use-package ivy
+  :ensure t
+  :defer t
+  :init
+  (ivy-mode 1)
+  )
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+(setq search-default-mode #'char-fold-to-regexp)
+(global-set-key "\C-s" 'swiper)
+
+
+;; (require 'init-flycheck)
+(use-package flycheck
+  :ensure t
+  :defer t
+  :init
+  (global-flycheck-mode))
+
+
+;; (require 'init-company-mode)
+(use-package company
+  :ensure t
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
+
+;; (require 'init-lsp-mode)
+(use-package lsp-mode
+  :hook (;; replace XXX-mde with concrrete major-mode
+			(ruby-mode . lsp-deferred)
+			;; if you want wich-key integration
+			(lsp-mode . lsp-enable-which-key-integration))
+  :commands (lsp lsp-deferred)
+  :ensure t
+  :defer t)
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
+
+(use-package helm-lsp
+  :ensure t
+  :commands helm-lsp-workspace-symbol)
+
+(use-package lsp-ivy
+  :ensure t
+  :commands lsp-ivy-workspace-symbol)
+
+(use-package lsp-treemacs
+  :ensure t
+  :commands lsp-treemacs-errors-list)
+
+;; (require 'init-web-mode)
+
+(use-package web-mode
+  :ensure t
+  :defer t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+  )
+
+;; (require 'init-frames)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; (require 'init-formatter)
+(use-package format-all
+  :ensure t)
+
+;; (require 'init-magit)
+(use-package magit
+  :ensure t)
+
+;; (require 'init-editor)
+
+
+;; Font
+(add-to-list 'default-frame-alist
+	     '(font . "JetBrains Mono"))
+(set-face-attribute 'default nil :height 130)
+
+;; Themes
+;; (use-package color-theme-modern
+;;   :ensure t)
+;; (load-theme 'pierson t t)
+;; (enable-theme 'pierson)
+
+; Atom One Dark Theme
+;; (use-package atom-one-dark-theme
+  ;; :ensure t)
+;; (load-theme 'atom-one-dark t t)
+;; (enable-theme 'atom-one-dark)
+
+;; Hide Toolbar
+(tool-bar-mode -1)
+
+;; Spacemacs Theme
+;; (use-package spacemacs-theme
+  ;; :ensure t)
+
+;; Smooth Scroll
+;; (use-package smooth-scrolling)
+;; (smooth-scrolling-mode 1)
+
+(setq-default tab-width 3)
+;;
+;; (use-package color-identifiers-mode)
+;; (add-hook 'after-init-hook 'global-color-identifiers-mode)
+
+
+;; Keybindings
+(global-set-key (kbd "C-;") 'comment-line)
+
+;; Cursor Type
+(setq-default cursor-type 'bar)
+(set-cursor-color "#FF9800")
+
+;; Init Themes --- init the themes of editor
+(use-package spacemacs-theme
+  :init (progn (load-theme 'spacemacs-dark t))
+  :defer t
+  :ensure t)
+
+
+(setq inhibit-startup-echo-area-message "YOUR-USER-NAME")
+;; (setq inhibit-startup-echo-area-message
+                ;; "your-login-name")
+
+
+;;=======
+
+;; (custom-set-variables
+;;  ;; custom-set-variables was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(initial-frame-alist (quote ((fullscreen . maximized))))
+;;  '(package-selected-packages (quote (solarized-theme auto-complete))))
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+	(quote
+	 (commpany afternoon-theme ample-theme dracula-theme ewal-spacemacs-themes vscode-icon lsp-treemacs lsp-ivy helm-lsp company-lsp atom-one-dark-theme format-all web-mode ivy direc-sidebar dired-sidebar use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

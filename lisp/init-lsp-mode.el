@@ -1,4 +1,4 @@
-(setq lsp-keymap-prefix "s-l")
+;; (setq lsp-keymap-prefix "s-l")
 
 (use-package lsp-mode
   :hook (;; replace XXX-mode with concrete major-mode
@@ -13,9 +13,9 @@
   :ensure t
   :commands lsp-ui-mode)
 
-(use-package company-lsp
-  :ensure t
-  :commands company-lsp)
+;; (use-package company-lsp
+  ;; :ensure t
+  ;; :commands company-lsp)
 
 (use-package helm-lsp
   :ensure t
