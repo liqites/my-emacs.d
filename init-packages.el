@@ -12,6 +12,7 @@ There arsze two things you can do about this warning:
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
 )
 
+;; load all find in ./lisp folder
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (add-to-list 'package-archives
@@ -29,6 +30,10 @@ There arsze two things you can do about this warning:
 (package-initialize)
 
 ;; fetch list of packages available
+(when (not package-archive-contents)
+    (package-refresh-contents))
+
+;; fetch list of packages available
 (unless package-archive-contents
 (package-refresh-contents))
 
@@ -37,18 +42,19 @@ There arsze two things you can do about this warning:
 (unless (package-installed-p package)
 (package-install package)))
 
-(require 'init-elpa)
-;; (require 'init-use-package)
+(require 'init-auto-complete)
 (require 'init-dired-sidebar)
 (require 'init-ido-mode)
 (require 'init-projectile)
 (require 'init-ivy-mode)
 (require 'init-flycheck)
 (require 'init-company-mode)
-;; (require 'init-lsp-mode)
-;; (require 'init-lsp-ui)
+(require 'init-lsp-mode)
 (require 'init-web-mode)
 (require 'init-frames)
 (require 'init-formatter)
-(require 'init-editor)
 (require 'init-custom-variables)
+(require 'init-editor)
+
+(provide 'init-packages)
+;;;init-packages.el ends here

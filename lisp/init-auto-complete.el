@@ -1,5 +1,11 @@
-(require-package 'auto-complete)
+;; (require-package 'auto-complete)
+;; (ac-config-default)
+;; (provide 'init-auto-complete)
 
-(ac-config-default)
+
+(use-package yasnippet
+  :defer t
+  :ensure t)
+(yas-global-mode 1)
 
 (provide 'init-auto-complete)
