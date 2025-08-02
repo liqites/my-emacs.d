@@ -1,4 +1,5 @@
-(load "~/.emacs.d/init-packages.el")
+;; (load "~/.emacs.d/init-packages.el")
+(load (expand-file-name "init-packages.el" user-emacs-directory))
 (require 'init-packages)
 
 (custom-set-variables
@@ -6,8 +7,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-	 '(color-theme-modern which-key dap-mode dracula-theme emacs-dracula use-package)))
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

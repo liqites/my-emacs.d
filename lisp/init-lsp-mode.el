@@ -34,8 +34,8 @@
   :commands lsp-treemacs-errors-list)
 
 ;; optionally if you want to use debugger
-(use-package dap-mode)
-(use-package dap-ruby)
+;; (use-package dap-mode)
+;; (use-package dap-ruby)
 
 (use-package which-key
   :config

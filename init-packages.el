@@ -26,14 +26,13 @@ There arsze two things you can do about this warning:
 '(use-package
 ))
 
+(setq package-archives '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+                         ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+								 ("org" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
 ;; activate all packages
 (package-initialize)
 
-;; fetch list of packages available
-(when (not package-archive-contents)
-    (package-refresh-contents))
-
-;; fetch list of packages available
 (unless package-archive-contents
 (package-refresh-contents))
 

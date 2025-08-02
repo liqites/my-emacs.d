@@ -9,3 +9,5 @@ auto-save-list/
 ido.last
 transient/*
 .*
+*.eln
+*.tmp
