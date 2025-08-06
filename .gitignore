@@ -1,5 +1,6 @@
 elpa/
 auto-save-list/
+backups/
 *.*~
 *.dat*
 *.eld
@@ -11,3 +12,5 @@ transient/*
 .*
 *.eln
 *.tmp
+history
+recentf
