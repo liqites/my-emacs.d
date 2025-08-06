@@ -177,4 +177,9 @@
   (setq savehist-additional-variables '(search-ring regexp-search-ring))
   (setq savehist-autosave-interval 60))
 
+;; 备份文件设置
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))  ; 备份文件存储到指定目录
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))  ; 自动保存文件存储到指定目录
+
+
 (provide 'init-editor)

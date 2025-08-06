@@ -36,6 +36,7 @@
 (require 'init-frames)
 (require 'init-formatter)
 (require 'init-treesitter)
+(require 'init-mmm)
 
 (provide 'init-packages)
 ;;;init-packages.el ends here
