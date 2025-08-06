@@ -13,9 +13,6 @@
 ;; List of packages to ensure are installed
 (setq package-list '(use-package))
 
-;; Activate all packages
-(package-initialize)
-
 (unless package-archive-contents
   (package-refresh-contents))
 
