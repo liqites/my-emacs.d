@@ -4,6 +4,7 @@
   :init
   ;; set prefix for lsp-command-keymap (few alternative - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
+  :demand t
   :hook (;; replace XXX-mode with concrete major-mode
 			;; (ruby-mode . lsp-deferred)
 			(ruby-mode . lsp-deferred)
@@ -15,6 +16,7 @@
 
 (use-package lsp-ui
   :ensure t
+  :demand t
   :commands lsp-ui-mode)
 
 ;; (use-package company-lsp
@@ -23,14 +25,17 @@
 
 (use-package helm-lsp
   :ensure t
+  :demand t
   :commands helm-lsp-workspace-symbol)
 
 (use-package lsp-ivy
   :ensure t
+  :demand t
   :commands lsp-ivy-workspace-symbol)
 
 (use-package lsp-treemacs
   :ensure t
+  :demand t
   :commands lsp-treemacs-errors-list)
 
 ;; optionally if you want to use debugger
@@ -38,6 +43,7 @@
 ;; (use-package dap-ruby)
 
 (use-package which-key
+  :demand t
   :config
   (which-key-mode))
 

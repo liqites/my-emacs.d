@@ -1,4 +1,6 @@
 ;; (load "~/.emacs.d/init-packages.el")
+(package-initialize)
+
 (load (expand-file-name "init-packages.el" user-emacs-directory))
 (require 'init-packages)
 
@@ -18,3 +20,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+ ;; Set Proxy
+ (setq url-proxy-services
+       '(("http"  . "0.0.0.0:6152")
+         ("https" . "0.0.0.0:6152")))
+
+ ;;
+ (setq mac-option-modifier 'meta)

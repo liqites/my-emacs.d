@@ -5,7 +5,8 @@
 
 (use-package yasnippet
   :defer t
-  :ensure t)
+  :ensure t
+  :demand t)
 (yas-global-mode 1)
 
 (provide 'init-auto-complete)

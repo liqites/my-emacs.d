@@ -34,7 +34,8 @@
 (use-package dracula-theme
   :init (load-theme 'dracula t)
   :defer t
-  :ensure t)
+  :ensure t
+  :demand t)
 
 ;; solarized-theme
 ;; (use-package solarized-theme
@@ -48,7 +49,7 @@
 	:init
 	(smooth-scrolling-mode 1)
   :ensure t
-  )
+  :demand t)
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
