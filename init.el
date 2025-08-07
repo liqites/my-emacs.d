@@ -4,23 +4,23 @@
 (setq inhibit-startup-message t)
 
 ;; 自定义欢迎 Buffer
-(defun my-custom-startup-buffer ()
-  "创建带包加载状态的自定义欢迎界面"
-  (let ((buf (get-buffer-create "*Welcome*")))
-  (with-current-buffer buf
-    (erase-buffer)
-    ;; 固定欢迎信息
-    (insert (propertize "
-  ╭──────────────────────────────────────╮
-  │                                      │
-  │       WELCOME TO MY EMACS            │
-  │       ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾            │
-  │                                      │
-  ╰──────────────────────────────────────╯
-" 'face '(:height 1.2 :foreground "#61afef")))
-    (insert (format "\n  Startup time: %s\n\n" (current-time-string)))
-    (setq buffer-read-only t)  ; 设为只读
-    (switch-to-buffer buf))))
+;; (defun my-custom-startup-buffer ()
+;;   "创建带包加载状态的自定义欢迎界面"
+;;   (let ((buf (get-buffer-create "*Welcome*")))
+;;   (with-current-buffer buf
+;;     (erase-buffer)
+;;     ;; 固定欢迎信息
+;;     (insert (propertize "
+;;   ╭──────────────────────────────────────╮
+;;   │                                      │
+;;   │       WELCOME TO MY EMACS            │
+;;   │       ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾            │
+;;   │                                      │
+;;   ╰──────────────────────────────────────╯
+;; " 'face '(:height 1.2 :foreground "#61afef")))
+;;     (insert (format "\n  Startup time: %s\n\n" (current-time-string)))
+;;     (setq buffer-read-only t)  ; 设为只读
+;;     (switch-to-buffer buf))))
 
 ; ;; 包加载状态监控
 ; (defun my-package-load-status (package &optional desc)
@@ -41,7 +41,7 @@
 ; (advice-add 'require :after #'my-package-load-status)
 
 ;; 启动时显示欢迎界面
-(add-hook 'emacs-startup-hook #'my-custom-startup-buffer)
+;; (add-hook 'emacs-startup-hook #'my-custom-startup-buffer)
 
 
 (load (expand-file-name "init-packages.el" user-emacs-directory))

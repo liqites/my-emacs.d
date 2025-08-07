@@ -251,18 +251,23 @@
 (use-package dashboard
   :ensure t
   :config
-  (dashboard-setup-startup-hook) ; 设置为 Emacs 启动时的钩子
-  (setq dashboard-items '((recents . 5)   ; 显示最近文件
-                          (bookmarks . 5) ; 显示书签
-                          (projects . 5)  ; 显示项目 (需要 project.el 支持)
-                          (agenda . 5)))  ; 显示 Org-mode 议程 (如果配置了 Org-mode)
-  ;; 自定义头部图片 (请将此路径替换为你的图片路径)
-  ;; (setq dashboard-header-image "~/.emacs.d/dashboard-header.png")
-  (setq dashboard-banner-logo-title "Welcome to Emacs!") ; 或者使用文本标题
-  (setq dashboard-startup-banner 'official) ; 使用官方 Emacs Banner (或 'nil 关闭)
-  (setq dashboard-modify-heading-or-insert-news t) ; 允许插入新闻
-  (setq dashboard-footer-icon nil) ; 关闭底部图标
-  (setq dashboard-set-init-info t)) ; 显示启动时间等信息
+  (dashboard-setup-startup-hook)
+  (setq dashboard-items '((recents . 5)   ; 显示最近5个文件
+                          (bookmarks . 5) ; 显示5个书签
+                          (projects . 5)  ; 显示5个项目
+                          (agenda . 5)))  ; 显示5个议程项
+
+  ;; 使用官方横幅并设置欢迎语
+  (setq dashboard-startup-banner 'official) ; 使用官方Emacs横幅
+  (setq dashboard-banner-logo-title "Welcome to The EMACS") ; 设置欢迎语
+
+  ;; 其他基本设置
+  (setq dashboard-center-content t) ; 内容居中显示
+  (setq dashboard-show-shortcuts t) ; 显示快捷键提示
+  (setq dashboard-set-init-info t)) ; 显示启动时间
+  ; (setq dashboard-startup-banner nil) ; 不显示任何图片
+  (setq dashboard-banner-logo-title "Welcome to The EMACS")
+
 
 ;; ============================================================
 ;;                       11. 文件管理增强
@@ -347,5 +352,22 @@
 ;   (setq centaur-tabs-set-close-button 'right)
 ;   (setq centaur-tabs-set-font "Input Sans Narrow-13") ; 设置字体和大小
 ;   )
+
+;; ============================================================
+;;                       16. 模式增强 (Hydra)
+;; ============================================================
+(use-package hydra
+  :ensure t
+  :config
+  ;; 字体大小调整 Hydra
+  (defhydra hydra-font-size (:color blue :hint nil)
+    "font"
+    ("j" text-scale-increase "更大")
+    ("k" text-scale-decrease "更小")
+    ("0" (lambda () (interactive) (text-scale-set 0)) "重置")
+    ("q" nil "退出")))
+
+;; 绑定 Hydra 到 C-c f
+(global-set-key (kbd "C-c f") 'hydra-font-size/font)
 
 (provide 'init-editor)
