@@ -27,7 +27,7 @@
 (require 'init-dired-sidebar)
 (require 'init-ido-mode)
 (require 'init-projectile)
-(require 'init-ivy-mode)
+; (require 'init-ivy-mode)
 (require 'init-flycheck)
 (require 'init-company-mode)
 (require 'init-lsp-mode)
