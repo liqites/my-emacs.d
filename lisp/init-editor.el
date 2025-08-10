@@ -1,4 +1,8 @@
 ;;; init-editor.el --- Core editor configuration
+;;; Commentary:
+;; Core editor configuration: basic editing, performance, UI, themes, tools, VC integration,
+;; backups & autosave handling, completion & search, dashboard, file & window management,
+;; usability enhancements, help system, tabs (optional), and Hydra workflows.
 
 ;; ============================================================
 ;;                       1. 基础编辑器设置
@@ -12,7 +16,10 @@
 (global-set-key (kbd "C-;") 'comment-line) ; 全局绑定 C-; 为注释行
 (setq-default cursor-type 'bar)     ; 设置光标类型为竖线
 (set-cursor-color "#29B6F6")       ; 设置光标颜色
-
+(electric-pair-mode 1)          ; 自动括号配对
+(show-paren-mode 1)             ; 高亮显示匹配括号
+(setq show-paren-delay 0)       ; 立即高亮匹配括号
+(global-display-line-numbers-mode 1) ; 显示行号
 ;; ============================================================
 ;;                     2. 性能与流畅度优化
 ;; ============================================================
@@ -182,6 +189,36 @@
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 ;; 自动保存文件存储到指定目录
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+;; 不生成备份文件和自动保存文件
+(setq make-backup-files nil    ; 禁用 ~ 备份
+  auto-save-default nil)   ; 禁用 #autosave#
+
+;; ============================================================
+;;               8. 外部文件更改监控与提示 (File Change Watch)
+;; ============================================================
+(require 'filenotify)
+
+(defvar my/file-notify-watches nil
+  "List of file-notify watch descriptors for open buffers.")
+
+(defun my/file-change-callback (event)
+  "Prompt to reload buffer when file changes on disk (EVENT)."
+  (let ((type (cadr event))
+        (file (caddr event)))
+    (when (eq type 'changed)
+      (when-let ((buf (get-file-buffer file)))
+        (with-current-buffer buf
+          (unless (buffer-modified-p)
+            (when (yes-or-no-p (format "File changed on disk: %s. Reload? " file))
+              (revert-buffer t t t))))))))
+
+(defun my/add-file-watch ()
+  "Add file-notify watch for the current buffer's file."  
+  (when-let ((file (buffer-file-name)))
+    (push (file-notify-add-watch file '(change) #'my/file-change-callback)
+          my/file-notify-watches)))
+
+(add-hook 'find-file-hook #'my/add-file-watch)
 
 ;; ============================================================
 ;;                    9. 补全与搜索框架 (Vertico + Consult)
@@ -266,7 +303,6 @@
   (setq dashboard-show-shortcuts t) ; 显示快捷键提示
   (setq dashboard-set-init-info t)) ; 显示启动时间
   ; (setq dashboard-startup-banner nil) ; 不显示任何图片
-  (setq dashboard-banner-logo-title "Welcome to The EMACS")
 
 
 ;; ============================================================
