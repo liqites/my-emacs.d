@@ -193,30 +193,48 @@
 (setq make-backup-files nil    ; 禁用 ~ 备份
   auto-save-default nil)   ; 禁用 #autosave#
 
-;; ============================================================
-;;               8. 外部文件更改监控与提示 (File Change Watch)
-;; ============================================================
+;;; ============================================================
+;;; 8. 外部文件更改监控与提示 (File Change Watch)
+;;; ============================================================
 (require 'filenotify)
 
 (defvar my/file-notify-watches nil
   "List of file-notify watch descriptors for open buffers.")
 
+(defvar my/file-notify-saved-files nil
+  "List of files recently saved by Emacs to ignore notifications.")
+
+;; Record files you save so we can ignore their own notifications
+(add-hook 'after-save-hook
+          (lambda ()
+            (when buffer-file-name
+              (push buffer-file-name my/file-notify-saved-files))))
+
 (defun my/file-change-callback (event)
-  "Prompt to reload buffer when file changes on disk (EVENT)."
+  "Prompt to reload buffer when file changes on disk (EVENT), ignoring Emacs saves."
   (let ((type (cadr event))
         (file (caddr event)))
     (when (eq type 'changed)
-      (when-let ((buf (get-file-buffer file)))
-        (with-current-buffer buf
-          (unless (buffer-modified-p)
-            (when (yes-or-no-p (format "File changed on disk: %s. Reload? " file))
-              (revert-buffer t t t))))))))
+      (if (member file my/file-notify-saved-files)
+          ;; our own save → drop it
+          (setq my/file-notify-saved-files
+                (delete file my/file-notify-saved-files))
+        ;; external change → prompt
+        (when-let ((buf (get-file-buffer file)))
+          (with-current-buffer buf
+            (unless (buffer-modified-p)
+              (when (yes-or-no-p
+                     (format "File changed on disk: %s. Reload? " file))
+                (revert-buffer t t t)))))))))
 
 (defun my/add-file-watch ()
-  "Add file-notify watch for the current buffer's file."  
+  "Add a file-notify watch for the current buffer’s file."
   (when-let ((file (buffer-file-name)))
-    (push (file-notify-add-watch file '(change) #'my/file-change-callback)
-          my/file-notify-watches)))
+    (let ((watch (file-notify-add-watch
+                  file
+                  '(change)
+                  #'my/file-change-callback)))
+      (push watch my/file-notify-watches))))
 
 (add-hook 'find-file-hook #'my/add-file-watch)
 
