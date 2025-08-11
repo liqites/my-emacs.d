@@ -63,7 +63,18 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages nil))
+ '(package-selected-packages
+   '(all-the-icons-dired beacon benchmark-init centaur-tabs company
+                         consult dap-mode dashboard diff-hl diminish
+                         dired-sidebar diredfl doom-themes
+                         dracula-theme flycheck format-all gcmh
+                         haml-mode helm-lsp helpful highlight-symbol
+                         hl-todo lsp-ivy lsp-pyright lsp-ui marginalia
+                         memory-usage mmm-mode moody orderless
+                         projectile projectile-rails
+                         rainbow-delimiters rinari ruby-hash-syntax
+                         smooth-scrolling tree-sitter-langs undo-tree
+                         vertico web-mode yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
