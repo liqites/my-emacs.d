@@ -467,4 +467,44 @@
   ;;   :config (load-theme 'catppuccin t))
   )
 
+;;; ============================================================
+;;; 19. 额外 UI 美化
+;;; ============================================================
+
+;;  Dimmer — 自动淡化非活动窗口
+;; (use-package dimmer
+;;   :ensure t
+;;   :init
+;;   ;; 在非焦点窗口中降低亮度
+;;   (setq dimmer-fraction 0.25
+;;         ;; 排除 which-key、minibuffer、NeoTree 等
+;;         dimmer-exclusion-regexp "\\` \\*\\(which-key\\|NeoTree\\|Minibuffer\\)\\*\\'")
+;;   :config
+;;   (dimmer-mode +1))
+
+;;  Golden-Ratio — 自动调整活动窗口尺寸
+(use-package golden-ratio
+  :ensure t
+  :config
+  (golden-ratio-mode +1)
+  (setq golden-ratio-adjust-factor .8))
+
+;;  Fill-Column-Indicator — 在指定列画一条竖线
+(use-package fill-column-indicator
+  :ensure t
+  :hook (prog-mode . fci-mode)
+  :init (setq fill-column 80))
+
+
+;;  Minimap — 编辑区侧边预览
+(use-package minimap
+  :ensure t
+  :commands (minimap-create minimap-kill)
+  :init
+  (setq minimap-window-location 'right
+        minimap-width-fraction 0.05)
+  :config
+  (global-set-key (kbd "C-c m") 'minimap-create))
+
+
 (provide 'init-editor)
