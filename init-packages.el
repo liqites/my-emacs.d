@@ -2,10 +2,13 @@
 
 ;; Set package archives (using Tsinghua mirrors for speed in China)
 (setq package-archives
-      '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-        ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-        ("org"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
+      '(
+				("gnu"    . "https://elpa.gnu.org/packages/")
+				("gnu-tsinghua"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+        ("nongnu-tsinghua" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+        ("melpa-tsinghua"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+        ("org-tsinghua"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+				("melpa-stable" . "https://stable.melpa.org/packages/"))) ; fallback
 
 ;; Add lisp directory to load-path
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))

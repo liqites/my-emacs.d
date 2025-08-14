@@ -424,4 +424,47 @@
 ;; 绑定 Hydra 到 C-c f
 (global-set-key (kbd "C-c f") 'hydra-font-size/font)
 
+;;; ============================================================
+;;; 17. 状态栏美化 (Doom Modeline)
+;;; ============================================================
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode)
+  :init
+  ;; 设置 modeline 高度、图标、风格等
+  (setq doom-modeline-height 25
+        doom-modeline-bar-width 4
+        doom-modeline-icon t
+        doom-modeline-major-mode-icon t
+        doom-modeline-buffer-file-name-style 'truncate-with-project
+        doom-modeline-minor-modes nil)
+  :config
+  ;; 开启
+  (doom-modeline-mode 1))
+
+;; filepath: ~/.emacs.d/lisp/init-editor.el
+
+;;; ============================================================
+;;; 18. 更多 Doom 风格 UI (solaire, doom-themes extras)
+;;; ============================================================
+(use-package solaire-mode
+  :ensure t
+  :hook (after-init . solaire-global-mode)
+  :config
+  ;; 在 Emacs GUI/TTY 下都启用
+  (solaire-mode +1))
+
+(use-package doom-themes
+  :after solaire-mode
+  :config
+  ;; Load Doom themes extras
+  (doom-themes-org-config)        ; 更好看的 org blocks
+  (doom-themes-neotree-config)    ; Neotree 图标和高亮
+  (doom-themes-visual-bell-config) ; Visual bell 闪烁提示
+  ;; (可选) 切换到 Catppuccin 主题
+  ;; (use-package catppuccin-theme
+  ;;   :ensure t
+  ;;   :config (load-theme 'catppuccin t))
+  )
+
 (provide 'init-editor)
