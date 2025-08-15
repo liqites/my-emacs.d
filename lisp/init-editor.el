@@ -3,6 +3,7 @@
 ;; Core editor configuration: basic editing, performance, UI, themes, tools, VC integration,
 ;; backups & autosave handling, completion & search, dashboard, file & window management,
 ;; usability enhancements, help system, tabs (optional), and Hydra workflows.
+;;; Code:
 
 ;; ============================================================
 ;;                       1. 基础编辑器设置
@@ -23,7 +24,7 @@
 ;; ============================================================
 ;;                     2. 性能与流畅度优化
 ;; ============================================================
-;; 垃圾回收优化（减少卡顿）
+;; gcmh: Optimize Emacs garbage collection to reduce UI pauses
 (use-package gcmh
   :ensure t
   :demand t
@@ -31,13 +32,13 @@
   (setq gcmh-high-cons-threshold (* 32 1024 1024))  ; 32MB 垃圾回收阈值
   (gcmh-mode +1)) ; 启用垃圾回收监控模式
 
-;; 处理超长行文件（防卡死）
+;; so-long: Automatically handle extremely long lines to prevent freezes
 (use-package so-long
   :ensure t
   :demand t
   :config (global-so-long-mode +1)) ; 启用全局超长行模式
 
-;; 异步操作支持
+;; async: Provide asynchronous processing commands for better responsiveness
 (use-package async
   :ensure t
   :demand t
@@ -264,19 +265,15 @@
 (use-package orderless
   :ensure t
   :init
-  (setq completion-styles '(orderless basic))
-  (setq completion-category-overrides '((file (styles . (partial-completion))))) ; 对文件路径使用部分匹配
-  (setq orderless-matching-styles
-        '(orderless-regexp
-          orderless-literal
-          orderless-initialism
-          orderless-flex))
-  )
+  (setq completion-styles '(orderless basic)
+        completion-category-overrides '((file (styles . (partial-completion))))
+        orderless-matching-styles
+        '(orderless-regexp orderless-literal orderless-initialism orderless-flex)))
 
 ;; 4. Consult: 提供一组强大的交互式命令，基于 Vertico / Embark
 (use-package consult
   :ensure t
-  :after (vertico) ; 确保在 vertico 之后加载
+  :after vertico
   :init
   ;; 明确禁用预览键，避免 'key-valid-p' 错误
   ;; 明确禁用 Consult 的预览功能
@@ -506,5 +503,48 @@
   :config
   (global-set-key (kbd "C-c m") 'minimap-create))
 
+(use-package pulsar
+  :ensure t
+  :hook (after-init . pulsar-global-mode)
+  :config
+  (setq pulsar-pulse t
+        pulsar-delay 0.05
+        pulsar-iterations 8
+        pulsar-face 'pulsar-green))
+
+(use-package highlight-indent-guides
+  :ensure t
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'character
+        highlight-indent-guides-character ?\│
+        highlight-indent-guides-responsive 'top))
+
+(use-package vertico-posframe
+  :ensure t
+  :after vertico
+  :config
+  (vertico-posframe-mode 1)
+  (setq vertico-posframe-border-width 1
+        vertico-posframe-parameters '((left-fringe . 8) (right-fringe . 8))))
+
+(use-package tab-line
+  :hook (after-init . tab-line-mode)
+  :config
+  (setq tab-line-new-button-show nil
+        tab-line-close-button-show nil
+        tab-line-separator " | "))
+
+(use-package page-break-lines
+  :ensure t
+  :hook (prog-mode . page-break-lines-mode))
+
+(use-package eyebrowse
+  :ensure t
+  :init (eyebrowse-mode t)
+  :config (setq eyebrowse-new-workspace t))
+
+;; (provide 'init-editor)
+;;   :config (setq eyebrowse-new-workspace t))
 
 (provide 'init-editor)
