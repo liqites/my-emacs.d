@@ -15,11 +15,11 @@
     (tsinghua
      ("gnu"          . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
      ("melpa"        . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-     ("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa-stable/"))
+     ("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/"))
     (ustc
      ("gnu"          . "https://mirrors.ustc.edu.cn/elpa/gnu/")
      ("melpa"        . "https://mirrors.ustc.edu.cn/elpa/melpa/")
-     ("melpa-stable" . "https://mirrors.ustc.edu.cn/elpa/melpa-stable/")))
+     ("melpa-stable" . "https://mirrors.ustc.edu.cn/elpa/stable-melpa/")))
 
   "Alist of mirror profiles and their `package-archives` alists.")
 
