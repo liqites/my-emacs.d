@@ -21,11 +21,11 @@
 (straight-use-package 'lsp-ui)
 
 ;; 调试支持（可选）
-(straight-use-package 'dap-mode)
-(with-eval-after-load 'lsp-mode
-  (require 'dap-hydra)
-  (dap-mode +1)
-  (dap-ui-mode +1))
+;; (straight-use-package 'dap-mode)
+;; (with-eval-after-load 'lsp-mode
+;;   (require 'dap-hydra)
+;;   (dap-mode +1)
+;;   (dap-ui-mode +1))
 
 ;; 语言特定配置示例（Python）
 (straight-use-package 'lsp-pyright)

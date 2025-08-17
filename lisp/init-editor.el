@@ -293,26 +293,28 @@
 ;; ============================================================
 ;;                      15. 标签页管理 (Centaur Tabs)
 ;; ============================================================
-; (use-package centaur-tabs
-;   :ensure t
-;   :demand t
-;   :config
-;   (centaur-tabs-mode 1) ; 启用 centaur-tabs
-;   (setq centaur-tabs-set-bar-height 25) ; 设置标签栏高度
-;   (setq centaur-tabs-set-icons t) ; 显示图标
-;   (setq centaur-tabs-set-modified-marker t) ; 显示修改标记
-;   (setq centaur-tabs-show-new-tab-button t) ; 显示新建标签按钮
-;   (setq centaur-tabs-style "rounded") ; 标签风格
-;   ;; 自动隐藏标签栏 (仅剩一个标签时)
-;   (setq centaur-tabs-auto-hide-tabs 't)
-;   (setq centaur-tabs-height 24)
-;   (setq centaur-tabs-bar-position 'top) ; 标签栏位置
-;   (setq centaur-tabs-close-button "x") ; 关闭按钮样式
-;   ;; 窗口切换时自动激活对应标签页
-;   (add-hook 'window-configuration-change-hook 'centaur-tabs-buffer-groups-update)
-;   (setq centaur-tabs-set-close-button 'right)
-;   (setq centaur-tabs-set-font "Input Sans Narrow-13") ; 设置字体和大小
-;   )
+;; (straight-use-package 'centaur-tabs)
+;; (centaur-tabs-mode 1)
+;; ;; 基本样式与行为
+;; (setq centaur-tabs-style "rounded"
+;;       centaur-tabs-set-icons t
+;;       centaur-tabs-set-modified-marker t
+;;       centaur-tabs-show-new-tab-button t
+;;       centaur-tabs-auto-hide-tabs 't
+;;       centaur-tabs-height 24
+;;       centaur-tabs-bar-position 'top)
+;; ;; 可选：高度/关闭按钮等（若变量存在则生效）
+;; (with-eval-after-load 'centaur-tabs
+;;   (when (boundp 'centaur-tabs-set-bar-height)
+;;     (setq centaur-tabs-set-bar-height 25))
+;;   (when (boundp 'centaur-tabs-close-button)
+;;     (setq centaur-tabs-close-button "x"))
+;;   (when (fboundp 'centaur-tabs-buffer-groups-update)
+;;     (add-hook 'window-configuration-change-hook 'centaur-tabs-buffer-groups-update))
+;;   (when (boundp 'centaur-tabs-set-close-button)
+;;     (setq centaur-tabs-set-close-button 'right))
+;;   (when (boundp 'centaur-tabs-set-font)
+;;     (setq centaur-tabs-set-font "Input Sans Narrow-13")))
 
 ;; ============================================================
 ;;                       16. 模式增强 (Hydra)
@@ -331,17 +333,26 @@
 (global-set-key (kbd "C-c f") 'hydra-font-size/font)
 
 ;;; ============================================================
-;;; 17. 状态栏美化 (Doom Modeline)
+;;; 17. 状态栏美化 
 ;;; ============================================================
-(straight-use-package 'doom-modeline)
-;; 设置 modeline 相关变量
-(setq doom-modeline-height 25
-  doom-modeline-bar-width 4
-  doom-modeline-icon t
-  doom-modeline-major-mode-icon t
-  doom-modeline-buffer-file-name-style 'truncate-with-project
-  doom-modeline-minor-modes nil)
-(add-hook 'after-init-hook #'doom-modeline-mode)
+;; 使用 straight.el 安装 moody 和 minions（推荐一起用，隐藏 minor modes）
+(straight-use-package 'moody)
+(straight-use-package 'minions)
+
+;; 启用 moody + minions
+(use-package moody
+  :straight t
+  :config
+  ;; 启用左右弯曲的样式（moody 提供的亮点）
+  (setq x-underline-at-descent-line t)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode)
+  (moody-replace-eldoc-minibuffer-message-function))
+
+(use-package minions
+  :straight t
+  :config
+  (minions-mode 1))
 
 ;; filepath: ~/.emacs.d/lisp/init-editor.el
 
@@ -363,15 +374,11 @@
 ;;; ============================================================
 
 ;;  Dimmer — 自动淡化非活动窗口
-;; (use-package dimmer
-;;   :ensure t
-;;   :init
-;;   ;; 在非焦点窗口中降低亮度
-;;   (setq dimmer-fraction 0.25
-;;         ;; 排除 which-key、minibuffer、NeoTree 等
-;;         dimmer-exclusion-regexp "\\` \\*\\(which-key\\|NeoTree\\|Minibuffer\\)\\*\\'")
-;;   :config
-;;   (dimmer-mode +1))
+(straight-use-package 'dimmer)
+;; 在非焦点窗口中降低亮度，并排除部分临时缓冲区
+(setq dimmer-fraction 0.25
+  dimmer-exclusion-regexp "\\` \\*\\(which-key\\|NeoTree\\|Minibuffer\\)\\*\\'")
+(dimmer-mode +1)
 
 ;;  Golden-Ratio — 自动调整活动窗口尺寸
 (straight-use-package 'golden-ratio)
