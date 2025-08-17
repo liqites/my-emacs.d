@@ -1,7 +1,4 @@
-(use-package ivy
-  :ensure t
-  :defer t
-  :demand t)
+(straight-use-package 'ivy)
 
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)

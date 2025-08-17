@@ -1,32 +1,18 @@
-(require 'package)
-
 ;; Add lisp directory to load-path
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-;; List of packages to ensure are installed
-(setq package-list '(use-package))
+;; Package management is handled by straight.el (bootstrapped in init.el).
+;; Avoid using package.el here to speed startup and prevent duplicate installs.
+;; If you still need GNU ELPA packages via package.el, wire them explicitly.
 
-(require 'init-mirrors)
-(set-package-mirror my/current-mirror)
-
-(unless package-archive-contents
-  (package-refresh-contents))
-
-;; Install missing packages
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-
-(require 'init-elpa)
+;; (require 'init-elpa) ; Not needed with straight.el
+;; (require 'init-mirrors) ; Only needed if you use package.el archives
 (require 'init-editor)
 (require 'init-auto-complete)
-(require 'init-dired-sidebar)
 (require 'init-ido-mode)
 (require 'init-projectile)
-; (require 'init-ivy-mode)
 (require 'init-flycheck)
 (require 'init-rails)
-;; (require 'init-ruby-mode)
 (require 'init-company-mode)
 (require 'init-lsp-mode)
 (require 'init-lsp-ui)

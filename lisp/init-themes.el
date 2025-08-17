@@ -16,9 +16,7 @@
 ;;   :defer t
 ;;   :ensure t)
 
-(use-package spacemacs-theme
-  :init (progn (load-theme 'spacemacs-light t))
-  :defer t
-  :ensure t)
+(straight-use-package 'spacemacs-theme)
+(load-theme 'spacemacs-light t)
 
 (provide 'init-themes)

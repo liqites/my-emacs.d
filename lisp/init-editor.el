@@ -25,24 +25,17 @@
 ;;                     2. 性能与流畅度优化
 ;; ============================================================
 ;; gcmh: Optimize Emacs garbage collection to reduce UI pauses
-(use-package gcmh
-  :ensure t
-  :demand t
-  :config
-  (setq gcmh-high-cons-threshold (* 32 1024 1024))  ; 32MB 垃圾回收阈值
-  (gcmh-mode +1)) ; 启用垃圾回收监控模式
+(straight-use-package 'gcmh)
+(setq gcmh-high-cons-threshold (* 32 1024 1024))  ; 32MB 垃圾回收阈值
+(gcmh-mode +1) ; 启用垃圾回收监控模式
 
 ;; so-long: Automatically handle extremely long lines to prevent freezes
-(use-package so-long
-  :ensure t
-  :demand t
-  :config (global-so-long-mode +1)) ; 启用全局超长行模式
+(straight-use-package 'so-long)
+(global-so-long-mode +1) ; 启用全局超长行模式
 
 ;; async: Provide asynchronous processing commands for better responsiveness
-(use-package async
-  :ensure t
-  :demand t
-  :commands (async-start async-start-process)) ; 提供异步启动命令
+(straight-use-package 'async)
+;; Commands provided: async-start, async-start-process
 
 ;; 内置性能分析工具（无需安装）
 (defun my-run-profiler ()
@@ -69,119 +62,79 @@
 ;;                       4. 主题与图标
 ;; ============================================================
 ;; 图标库（需先于其他插件加载）
-(use-package all-the-icons
-  :ensure t
-  :demand t
-  :if (display-graphic-p)  ; 仅在图形界面加载
-  :config
-  (when (and (fboundp 'daemonp) (daemonp))
-    (add-hook 'after-make-frame-functions
-              (lambda (frame)
-                (with-selected-frame frame
-                  (unless (display-graphic-p)
-                    (all-the-icons-ivy-setup)))))))
+(straight-use-package 'all-the-icons)
+;; only meaningful in GUI; optional frame hook kept minimal
 
 ;; Dired 文件管理器图标
-(use-package all-the-icons-dired
-  :ensure t
-  :hook (dired-mode . all-the-icons-dired-mode))
+(straight-use-package 'all-the-icons-dired)
+(add-hook 'dired-mode-hook #'all-the-icons-dired-mode)
 
 ;; Doom 主题集合
-(use-package doom-themes
-  :ensure t
-  :demand t
-  :config
-  (setq doom-themes-enable-bold t    ; 启用粗体
-        doom-themes-enable-italic t) ; 启用斜体
-  ;; 可选：加载特定主题
-  ;; (load-theme 'doom-one t)
-  )
+(straight-use-package 'doom-themes)
+(setq doom-themes-enable-bold t
+  doom-themes-enable-italic t)
 
 ;; Dracula 主题（与 doom-themes 二选一，当前默认启用 Dracula）
-(use-package dracula-theme
-  :ensure t
-  :demand t
-  :init (load-theme 'dracula t))
+(straight-use-package 'dracula-theme)
+(load-theme 'dracula t)
 
 ;; 现代化模式行
-(use-package moody
-  :ensure t
-  :demand t
-  :config
-  (setq moody-slant-function #'moody-slant-apple-rgb) ; 风格设置
-  (moody-replace-mode-line-buffer-identification)      ; 替换缓冲区标识
-  (moody-replace-vc-mode))                             ; 替换版本控制显示
+(straight-use-package 'moody)
+(setq moody-slant-function #'moody-slant-apple-rgb)
+(moody-replace-mode-line-buffer-identification)
+(moody-replace-vc-mode)
 
 ;; ============================================================
 ;;                       5. 效率工具
 ;; ============================================================
 ;; 高亮 TODO 注释
-(use-package hl-todo
-  :ensure t
-  :demand t
-  :hook (prog-mode . hl-todo-mode) ; 在编程模式下启用
-  :config
-  (setq hl-todo-highlight-punctuation ":" ; 设置高亮标点
-        hl-todo-keyword-faces              ; 定义高亮关键字及颜色
-        '(("TODO"   . "#FF0000")
-          ("FIXME"  . "#FF8C00")
-          ("HACK"   . "#FFD700")
-          ("NOTE"   . "#1E90FF")
-          ("DEPRECATED" . "#9400D3"))))
+(straight-use-package 'hl-todo)
+(add-hook 'prog-mode-hook #'hl-todo-mode)
+(setq hl-todo-highlight-punctuation ":"
+      hl-todo-keyword-faces
+      '(("TODO"   . "#FF0000")
+        ("FIXME"  . "#FF8C00")
+        ("HACK"   . "#FFD700")
+        ("NOTE"   . "#1E90FF")
+        ("DEPRECATED" . "#9400D3")))
 
 ;; 快捷键提示
-(use-package which-key
-  :ensure t
-  :demand t
-  :config
-  (which-key-mode +1)             ; 启用 which-key 模式
-  (setq which-key-idle-delay 0.3)) ; 设置提示延迟
+(straight-use-package 'which-key)
+(which-key-mode +1)
+(setq which-key-idle-delay 0.3)
 
 ;; 可视化撤销历史
-(use-package undo-tree
-  :ensure t
-  :demand t
-  :config
-  (global-undo-tree-mode +1)      ; 全局启用 undo-tree
-  (setq undo-tree-auto-save-history t) ; 自动保存历史记录
-  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))) ; 历史记录目录
-  :bind (("C-x u" . undo-tree-visualize))) ; 绑定可视化快捷键
+(straight-use-package 'undo-tree)
+(global-undo-tree-mode +1)
+(setq undo-tree-auto-save-history t)
+(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+(global-set-key (kbd "C-x u") 'undo-tree-visualize)
 
 ;; 最近文件记录
-(use-package recentf
-  :demand t
-  :config
-  (recentf-mode +1)              ; 启用最近文件模式
-  (setq recentf-max-menu-items 100) ; 菜单最大项目数
-  (setq recentf-max-saved-items 200) ; 保存最大项目数
-  (add-to-list 'recentf-exclude "~/.emacs.d/.*")) ; 排除指定目录
+(recentf-mode +1)
+(setq recentf-max-menu-items 100)
+(setq recentf-max-saved-items 200)
+(add-to-list 'recentf-exclude "~/.emacs.d/.*")
 
 ;; Minibuffer 历史记录
-(use-package savehist
-  :demand t
-  :config
-  (savehist-mode +1)             ; 启用保存历史模式
-  (setq savehist-additional-variables '(search-ring regexp-search-ring)) ; 额外变量
-  (setq savehist-autosave-interval 60)) ; 自动保存间隔
+(savehist-mode +1)
+(setq savehist-additional-variables '(search-ring regexp-search-ring))
+(setq savehist-autosave-interval 60)
 
 ;; 平滑滚动
-(use-package smooth-scrolling
-  :ensure t
-  :demand t
-  :init (smooth-scrolling-mode 1)) ; 启用平滑滚动
+(straight-use-package 'smooth-scrolling)
+(smooth-scrolling-mode 1)
 
 ;; ============================================================
 ;;                      6. 版本控制集成
 ;; ============================================================
 ;; Git 修改状态指示器
-(use-package diff-hl
-  :ensure t
-  :hook ((prog-mode . diff-hl-mode)         ; 在编程模式下启用
-         (magit-post-refresh . diff-hl-update)) ; Magit 更新后更新
-  :config
-  (global-diff-hl-mode +1) ; 全局启用 diff-hl
-  (setq diff-hl-side 'right) ; 显示在右侧
-  (setq diff-hl-draw-borders nil)) ; 不绘制边框
+(straight-use-package 'diff-hl)
+(add-hook 'prog-mode-hook #'diff-hl-mode)
+(add-hook 'magit-post-refresh-hook #'diff-hl-update)
+(global-diff-hl-mode +1)
+(setq diff-hl-side 'right)
+(setq diff-hl-draw-borders nil)
 
 ;; ============================================================
 ;;                    7. 备份与自动保存设置
@@ -243,104 +196,68 @@
 ;;                    9. 补全与搜索框架 (Vertico + Consult)
 ;; ============================================================
 ;; 1. Vertico: 最小的 Emacs 交互式完成框架
-(use-package vertico
-  :ensure t
-  :init
-  (vertico-mode)
-  ;; 启用 Vertico 后，默认的 `completion-styles` 会被改变
-  ;; 可以根据需求调整 `completion-styles`
-  ;; (setq completion-styles '(basic substring))
-  ;; (setq completion-category-defaults nil)
-  ;; (setq completion-category-overrides nil)
-  )
+(straight-use-package 'vertico)
+(vertico-mode 1)
 
 ;; 2. Marginalia: 为 Vertico (或其他补全框架) 添加额外信息 (例如文件大小，日期等)
-(use-package marginalia
-  :ensure t
-  :after vertico
-  :init
-  (marginalia-mode))
+(straight-use-package 'marginalia)
+(marginalia-mode 1)
 
 ;; 3. Orderless: 高级无序匹配风格，用于更灵活的模糊搜索
-(use-package orderless
-  :ensure t
-  :init
-  (setq completion-styles '(orderless basic)
-        completion-category-overrides '((file (styles . (partial-completion))))
-        orderless-matching-styles
-        '(orderless-regexp orderless-literal orderless-initialism orderless-flex)))
+(straight-use-package 'orderless)
+(setq completion-styles '(orderless basic)
+  completion-category-overrides '((file (styles . (partial-completion))))
+  orderless-matching-styles
+  '(orderless-regexp orderless-literal orderless-initialism orderless-flex))
 
 ;; 4. Consult: 提供一组强大的交互式命令，基于 Vertico / Embark
-(use-package consult
-  :ensure t
-  :after vertico
-  :init
-  ;; 明确禁用预览键，避免 'key-valid-p' 错误
-  ;; 明确禁用 Consult 的预览功能
-  (setq consult-preview-function nil)
-  :config
-  ;; 快捷键绑定 (可以根据个人习惯调整)
-  (global-set-key (kbd "C-x b") 'consult-buffer) ; 替换 C-x b 为 consult-buffer
-  (global-set-key (kbd "C-x C-f") 'consult-find) ; 替换 C-x C-f 为 consult-find (强大的文件查找)
-  (global-set-key (kbd "C-s") 'consult-line)    ; 替换 C-s 为 consult-line (行内搜索)
-  (global-set-key (kbd "M-y") 'consult-yank-pop) ; 替换 M-y 为 consult-yank-pop
-  (global-set-key (kbd "M-s g") 'consult-grep)   ; 全局 grep 搜索
-  (global-set-key (kbd "M-s r") 'consult-ripgrep) ; ripgrep (如果已安装)
-  (global-set-key (kbd "M-s l") 'consult-locate) ; locate 搜索
-  (global-set-key (kbd "M-g M-g") 'consult-goto-line) ; 跳转到行
-  (global-set-key (kbd "M-g f") 'consult-fd) ; fdfind (如果已安装)
-
-  ;; 启用预览模式 (实时显示结果)
-
-
-  ;; 确保 consult-project-root 总是使用 project.el 的项目根
-  (setq consult-project-root-function 'project-root)
-  )
+(straight-use-package 'consult)
+;; 明确禁用 Consult 的预览功能
+(setq consult-preview-function nil)
+;; 快捷键绑定
+(global-set-key (kbd "C-x b") 'consult-buffer)
+(global-set-key (kbd "C-x C-f") 'consult-find)
+(global-set-key (kbd "C-s") 'consult-line)
+(global-set-key (kbd "M-y") 'consult-yank-pop)
+(global-set-key (kbd "M-s g") 'consult-grep)
+(global-set-key (kbd "M-s r") 'consult-ripgrep)
+(global-set-key (kbd "M-s l") 'consult-locate)
+(global-set-key (kbd "M-g M-g") 'consult-goto-line)
+(global-set-key (kbd "M-g f") 'consult-fd)
+(setq consult-project-root-function 'project-root)
 
 ;; ============================================================
 ;;                       10. 启动界面 (Dashboard)
 ;; ============================================================
-(use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook)
-  (setq dashboard-items '((recents . 5)   ; 显示最近5个文件
-                          (bookmarks . 5) ; 显示5个书签
-                          (projects . 5)  ; 显示5个项目
-                          (agenda . 5)))  ; 显示5个议程项
-
-  ;; 使用官方横幅并设置欢迎语
-  (setq dashboard-startup-banner 'official) ; 使用官方Emacs横幅
-  (setq dashboard-banner-logo-title "Welcome to The EMACS") ; 设置欢迎语
-
-  ;; 其他基本设置
-  (setq dashboard-center-content t) ; 内容居中显示
-  (setq dashboard-show-shortcuts t) ; 显示快捷键提示
-  (setq dashboard-set-init-info t)) ; 显示启动时间
-  ; (setq dashboard-startup-banner nil) ; 不显示任何图片
+(straight-use-package 'dashboard)
+(dashboard-setup-startup-hook)
+(setq dashboard-items '((recents . 5)
+                        (bookmarks . 5)
+                        (projects . 5)
+                        (agenda . 5)))
+(setq dashboard-startup-banner 'official)
+(setq dashboard-banner-logo-title "Welcome to The EMACS")
+(setq dashboard-center-content t)
+(setq dashboard-show-shortcuts t)
+(setq dashboard-set-init-info t)
 
 
 ;; ============================================================
 ;;                       11. 文件管理增强
 ;; ============================================================
-(use-package diredfl
-  :ensure t
-  :hook (dired-mode . diredfl-mode) ; 在 dired 模式下启用
-  :config
-  (setq diredfl-global-modes '(dired-mode))) ; 确保全局作用于 dired
+(straight-use-package 'diredfl)
+(add-hook 'dired-mode-hook #'diredfl-mode)
+(setq diredfl-global-modes '(dired-mode))
 
 ;; ============================================================
 ;;                       12. 窗口管理
 ;; ============================================================
 ;; 快速窗口切换
-(use-package ace-window
-  :ensure t
-  :init
-  (global-set-key (kbd "M-o") 'ace-window) ; 全局绑定 M-o 快速切换窗口
-  :config
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)) ; 设置快捷键字符
-  (setq aw-scope 'frame) ; 仅在当前框架内切换
-  (setq aw-display-mode 'top-left)) ; 标签显示在左上角
+(straight-use-package 'ace-window)
+(global-set-key (kbd "M-o") 'ace-window)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+(setq aw-scope 'frame)
+(setq aw-display-mode 'top-left)
 
 ;; 撤销/重做窗口布局
 (winner-mode 1) ; 启用 winner-mode
@@ -352,33 +269,26 @@
 ;;                       13. 界面与可用性
 ;; ============================================================
 ;; 光标高亮信标
-(use-package beacon
-  :ensure t
-  :init
-  (beacon-mode 1)) ; 启用 beacon 模式
+(straight-use-package 'beacon)
+(beacon-mode 1)
 
 ;; 自动高亮当前符号
-(use-package highlight-symbol
-  :ensure t
-  :hook (prog-mode . highlight-symbol-mode))
+(straight-use-package 'highlight-symbol)
+(add-hook 'prog-mode-hook #'highlight-symbol-mode)
 
 ;; 彩虹括号高亮
-(use-package rainbow-delimiters
-  :ensure t
-  :hook (prog-mode . rainbow-delimiters-mode))
+(straight-use-package 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;; ============================================================
 ;;                       14. 帮助系统增强
 ;; ============================================================
 ;; 更友好的帮助系统
-(use-package helpful
-  :ensure t
-  :commands (helpful-at-point helpful-callable helpful-key helpful-variable helpful-symbol)
-  :config
-  (global-set-key (kbd "C-h f") 'helpful-callable) ; C-h f (function)
-  (global-set-key (kbd "C-h v") 'helpful-variable) ; C-h v (variable)
-  (global-set-key (kbd "C-h k") 'helpful-key)      ; C-h k (key)
-  (global-set-key (kbd "C-h F") 'helpful-at-point)) ; C-h F (full help at point)
+(straight-use-package 'helpful)
+(global-set-key (kbd "C-h f") 'helpful-callable)
+(global-set-key (kbd "C-h v") 'helpful-variable)
+(global-set-key (kbd "C-h k") 'helpful-key)
+(global-set-key (kbd "C-h F") 'helpful-at-point)
 
 ;; ============================================================
 ;;                      15. 标签页管理 (Centaur Tabs)
@@ -407,16 +317,15 @@
 ;; ============================================================
 ;;                       16. 模式增强 (Hydra)
 ;; ============================================================
-(use-package hydra
-  :ensure t
-  :config
+(straight-use-package 'hydra)
+;;
   ;; 字体大小调整 Hydra
   (defhydra hydra-font-size (:color blue :hint nil)
     "font"
     ("j" text-scale-increase "更大")
     ("k" text-scale-decrease "更小")
     ("0" (lambda () (interactive) (text-scale-set 0)) "重置")
-    ("q" nil "退出")))
+    ("q" nil "退出"))
 
 ;; 绑定 Hydra 到 C-c f
 (global-set-key (kbd "C-c f") 'hydra-font-size/font)
@@ -424,45 +333,30 @@
 ;;; ============================================================
 ;;; 17. 状态栏美化 (Doom Modeline)
 ;;; ============================================================
-(use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode)
-  :init
-  ;; 设置 modeline 高度、图标、风格等
-  (setq doom-modeline-height 25
-        doom-modeline-bar-width 4
-        doom-modeline-icon t
-        doom-modeline-major-mode-icon t
-        doom-modeline-buffer-file-name-style 'truncate-with-project
-        doom-modeline-minor-modes nil)
-  :config
-  ;; 开启
-  (doom-modeline-mode 1))
+(straight-use-package 'doom-modeline)
+;; 设置 modeline 相关变量
+(setq doom-modeline-height 25
+  doom-modeline-bar-width 4
+  doom-modeline-icon t
+  doom-modeline-major-mode-icon t
+  doom-modeline-buffer-file-name-style 'truncate-with-project
+  doom-modeline-minor-modes nil)
+(add-hook 'after-init-hook #'doom-modeline-mode)
 
 ;; filepath: ~/.emacs.d/lisp/init-editor.el
 
 ;;; ============================================================
 ;;; 18. 更多 Doom 风格 UI (solaire, doom-themes extras)
 ;;; ============================================================
-(use-package solaire-mode
-  :ensure t
-  :hook (after-init . solaire-global-mode)
-  :config
-  ;; 在 Emacs GUI/TTY 下都启用
-  (solaire-mode +1))
+(straight-use-package 'solaire-mode)
+(add-hook 'after-init-hook #'solaire-global-mode)
+(solaire-mode +1)
 
-(use-package doom-themes
-  :after solaire-mode
-  :config
-  ;; Load Doom themes extras
-  (doom-themes-org-config)        ; 更好看的 org blocks
-  (doom-themes-neotree-config)    ; Neotree 图标和高亮
-  (doom-themes-visual-bell-config) ; Visual bell 闪烁提示
-  ;; (可选) 切换到 Catppuccin 主题
-  ;; (use-package catppuccin-theme
-  ;;   :ensure t
-  ;;   :config (load-theme 'catppuccin t))
-  )
+;; doom-themes extras
+(with-eval-after-load 'doom-themes
+  (doom-themes-org-config)
+  (doom-themes-neotree-config)
+  (doom-themes-visual-bell-config))
 
 ;;; ============================================================
 ;;; 19. 额外 UI 美化
@@ -480,69 +374,52 @@
 ;;   (dimmer-mode +1))
 
 ;;  Golden-Ratio — 自动调整活动窗口尺寸
-(use-package golden-ratio
-  :ensure t
-  :config
-  (golden-ratio-mode +1)
-  (setq golden-ratio-adjust-factor .8))
+(straight-use-package 'golden-ratio)
+(golden-ratio-mode +1)
+(setq golden-ratio-adjust-factor .8)
 
 ;;  Fill-Column-Indicator — 在指定列画一条竖线
-(use-package fill-column-indicator
-  :ensure t
-  :hook (prog-mode . fci-mode)
-  :init (setq fill-column 80))
+(straight-use-package 'fill-column-indicator)
+(add-hook 'prog-mode-hook #'fci-mode)
+(setq fill-column 80)
 
 
 ;;  Minimap — 编辑区侧边预览
-(use-package minimap
-  :ensure t
-  :commands (minimap-create minimap-kill)
-  :init
-  (setq minimap-window-location 'right
-        minimap-width-fraction 0.05)
-  :config
-  (global-set-key (kbd "C-c m") 'minimap-create))
+(straight-use-package 'minimap)
+(setq minimap-window-location 'right
+  minimap-width-fraction 0.05)
+(global-set-key (kbd "C-c m") 'minimap-create)
 
-(use-package pulsar
-  :ensure t
-  :hook (after-init . pulsar-global-mode)
-  :config
-  (setq pulsar-pulse t
-        pulsar-delay 0.05
-        pulsar-iterations 8
-        pulsar-face 'pulsar-green))
+(straight-use-package 'pulsar)
+(add-hook 'after-init-hook #'pulsar-global-mode)
+(setq pulsar-pulse t
+  pulsar-delay 0.05
+  pulsar-iterations 8
+  pulsar-face 'pulsar-green)
 
-(use-package highlight-indent-guides
-  :ensure t
-  :hook (prog-mode . highlight-indent-guides-mode)
-  :config
-  (setq highlight-indent-guides-method 'character
-        highlight-indent-guides-character ?\│
-        highlight-indent-guides-responsive 'top))
+(straight-use-package 'highlight-indent-guides)
+(add-hook 'prog-mode-hook #'highlight-indent-guides-mode)
+(setq highlight-indent-guides-method 'character
+  highlight-indent-guides-character ?\│
+  highlight-indent-guides-responsive 'top)
 
-(use-package vertico-posframe
-  :ensure t
-  :after vertico
-  :config
-  (vertico-posframe-mode 1)
-  (setq vertico-posframe-border-width 1
-        vertico-posframe-parameters '((left-fringe . 8) (right-fringe . 8))))
+(straight-use-package 'vertico-posframe)
+(vertico-posframe-mode 1)
+(setq vertico-posframe-border-width 1
+  vertico-posframe-parameters '((left-fringe . 8) (right-fringe . 8)))
 
-(use-package tab-line
-  :hook (after-init . tab-line-mode)
-  :config
-  (setq tab-line-new-button-show nil
-        tab-line-close-button-show nil
-        tab-line-separator " | "))
+;; Built-in tab-line
+(add-hook 'after-init-hook #'tab-line-mode)
+(setq tab-line-new-button-show nil
+  tab-line-close-button-show nil
+  tab-line-separator " | ")
 
-(use-package page-break-lines
-  :ensure t
-  :hook (prog-mode . page-break-lines-mode))
+(straight-use-package 'page-break-lines)
+(add-hook 'prog-mode-hook #'page-break-lines-mode)
 
-(use-package eyebrowse
-  :ensure t
-  :init (eyebrowse-mode t)
-  :config (setq eyebrowse-new-workspace t))
+(straight-use-package 'eyebrowse)
+(eyebrowse-mode t)
+(setq eyebrowse-new-workspace t)
 
 ;; (provide 'init-editor)
 ;;   :config (setq eyebrowse-new-workspace t))

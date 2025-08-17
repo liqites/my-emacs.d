@@ -1,6 +1,4 @@
-(use-package company
-  :ensure t
-  :demand t)
+(straight-use-package 'company)
 
 ;; To use company-mode in all buffers
 (add-hook 'after-init-hook 'global-company-mode)

@@ -1,5 +1,3 @@
-(use-package format-all
-  :ensure t
-  :demand t)
+(straight-use-package 'format-all)
 
 (provide 'init-formatter)

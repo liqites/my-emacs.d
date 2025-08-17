@@ -1,28 +1,23 @@
 ;;; init-lsp-ui.el --- LSP UI enhancements
 
-(use-package lsp-ui
-  :ensure t
-  :after lsp-mode
-  :commands lsp-ui-mode
-  :hook (lsp-mode . lsp-ui-mode)  ; 自动启用
-  :custom
-  (lsp-ui-doc-enable t)           ; 启用悬浮文档
-  (lsp-ui-doc-position 'top)      ; 文档显示在顶部（可选：'bottom'）
-  (lsp-ui-doc-max-width 100)      ; 文档最大宽度
-  (lsp-ui-doc-max-height 30)      ; 文档最大高度
-  (lsp-ui-sideline-enable t)      ; 启用右侧边栏提示
-  (lsp-ui-sideline-show-diagnostics t) ; 显示诊断信息
-  (lsp-ui-sideline-show-hover t)  ; 显示悬停信息
-  (lsp-ui-sideline-show-code-actions t) ; 显示代码操作
-  (lsp-ui-peek-enable t)          ; 启用代码跳转预览
-  (lsp-ui-peek-list-width 60)     ; 预览列表宽度
-  (lsp-ui-peek-peek-height 25)    ; 预览内容高度
-  :bind (:map lsp-ui-mode-map
-         ("M-." . lsp-ui-peek-find-definitions)   ; 跳转到定义
-         ("M-?" . lsp-ui-peek-find-references))    ; 查找引用
-  :config
-  ;; 优化性能：延迟显示悬浮文档
-  (setq lsp-ui-doc-delay 1.0))
+(straight-use-package 'lsp-ui)
+(add-hook 'lsp-mode-hook #'lsp-ui-mode)  ; 自动启用
+;; Custom variables
+(setq lsp-ui-doc-enable t
+  lsp-ui-doc-position 'top
+  lsp-ui-doc-max-width 100
+  lsp-ui-doc-max-height 30
+  lsp-ui-sideline-enable t
+  lsp-ui-sideline-show-diagnostics t
+  lsp-ui-sideline-show-hover t
+  lsp-ui-sideline-show-code-actions t
+  lsp-ui-peek-enable t
+  lsp-ui-peek-list-width 60
+  lsp-ui-peek-peek-height 25
+  lsp-ui-doc-delay 1.0)
+(with-eval-after-load 'lsp-ui
+  (define-key lsp-ui-mode-map (kbd "M-.") #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map (kbd "M-?") #'lsp-ui-peek-find-references))
 
 (provide 'init-lsp-ui)
 ;;; init-lsp-ui.el ends here

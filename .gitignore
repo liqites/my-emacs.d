@@ -14,3 +14,4 @@ transient/*
 *.tmp
 history
 recentf
+straight/*

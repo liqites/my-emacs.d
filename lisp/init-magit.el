@@ -1,6 +1,4 @@
-(use-package magit
-  :ensure t
-  :bind ("C-x g" . magit-status)
-)
+(straight-use-package 'magit)
+(global-set-key (kbd "C-x g") 'magit-status)
 
 (provide 'init-magit)

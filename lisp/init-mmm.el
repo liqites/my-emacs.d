@@ -1,12 +1,9 @@
 ;;; init-mmm.el --- Configuration for multiple major modes support
 
 ;; ==================== 基本配置 ====================
-(use-package mmm-mode
-  :ensure t
-  :demand t
-  :config
-  (setq mmm-global-mode 'buffers-with-submode-classes)
-  (setq mmm-submode-decoration-level 2))
+(straight-use-package 'mmm-mode)
+(setq mmm-global-mode 'buffers-with-submode-classes)
+(setq mmm-submode-decoration-level 2)
 
 ;; ==================== 错误处理 ====================
 (defun my-mmm-error-handler (err)

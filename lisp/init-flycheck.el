@@ -1,6 +1,4 @@
-(use-package flycheck
-	     :ensure t
-	     :demand t
-	     :init (global-flycheck-mode))
+(straight-use-package 'flycheck)
+(global-flycheck-mode 1)
 
 (provide 'init-flycheck)
