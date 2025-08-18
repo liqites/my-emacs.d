@@ -431,4 +431,14 @@
 ;; (provide 'init-editor)
 ;;   :config (setq eyebrowse-new-workspace t))
 
+;; 增大 GC 阈值，减少垃圾回收次数
+(setq gc-cons-threshold 100000000  ;; 100 MB
+      gc-cons-percentage 0.6)
+
+;; 启动时临时关闭 GC，加快加载
+(setq gc-cons-threshold most-positive-fixnum)
+(add-hook 'emacs-startup-hook
+          (lambda () (setq gc-cons-threshold 100000000)))
+
+
 (provide 'init-editor)
