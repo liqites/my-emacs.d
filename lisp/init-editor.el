@@ -354,6 +354,23 @@
   :config
   (minions-mode 1))
 
+;; ------------------------------
+;; NeoTree
+;; ------------------------------
+(use-package neotree
+  :straight t
+  :bind ([f8] . neotree-toggle)  ;; F8 打开/关闭
+  :config
+  ;; 设置项目根目录自动切换
+  (setq neo-smart-open t)
+  ;; 启用 all-the-icons（可选，性能影响小于 nerd-icons）
+  (use-package all-the-icons
+    :straight t)
+  ;; NeoTree 只显示文件夹图标
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  ;; 自动跟随当前 buffer
+  (setq neo-autorefresh t))
+
 ;; filepath: ~/.emacs.d/lisp/init-editor.el
 
 ;;; ============================================================
@@ -440,5 +457,21 @@
 (add-hook 'emacs-startup-hook
           (lambda () (setq gc-cons-threshold 100000000)))
 
+;; 提高滚动流畅度
+(setq redisplay-dont-pause t
+      fast-but-imprecise-scrolling t
+      jit-lock-defer-time 0.05)
+
+;; ------------------------------
+;; 字体优化
+;; ------------------------------
+;; 设置固定宽度字体，提高绘制效率
+(set-face-attribute 'default nil :font "Fira Code Retina" :height 140)
+
+
+;; YAML 语言支持
+(straight-use-package 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-mode))
+(add-hook 'yaml-mode-hook (lambda () (setq yaml-indent-offset 2)))
 
 (provide 'init-editor)

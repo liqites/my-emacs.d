@@ -14,13 +14,14 @@
 (require 'init-flycheck)
 (require 'init-rails)
 (require 'init-company-mode)
-(require 'init-lsp-mode)
-(require 'init-lsp-ui)
+;; (require 'init-lsp-mode)
+;; (require 'init-lsp-ui)
 (require 'init-web-mode)
 (require 'init-frames)
 (require 'init-formatter)
 (require 'init-treesitter)
 (require 'init-mmm)
+(require 'init-docker)  ;; Docker integration: CLI, Dockerfile, Compose
 
 (provide 'init-packages)
 ;;;init-packages.el ends here
