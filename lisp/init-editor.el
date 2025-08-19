@@ -73,10 +73,18 @@
 (straight-use-package 'doom-themes)
 (setq doom-themes-enable-bold t
   doom-themes-enable-italic t)
+;; (load-theme 'doom-dark+ t)
+;; (load-theme 'doom-one t)
+;; (load-theme 'doom-city-lights t)
+(load-theme 'doom-acario-light t)
 
-;; Dracula 主题（与 doom-themes 二选一，当前默认启用 Dracula）
-(straight-use-package 'dracula-theme)
-(load-theme 'dracula t)
+(straight-use-package 'circadian)
+(setq calendar-latitude 31.230391)
+(setq calendar-longitude 121.473701)
+(setq circadian-themes '((:sunrise . doom-acario-light)
+                          (:sunset . doom-one)))
+(setq circadian-verbose t)
+(circadian-setup)
 
 ;; 现代化模式行
 (straight-use-package 'moody)

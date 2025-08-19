@@ -8,4 +8,4 @@
 ;; Keybinding: C-c r to launch an rg search
 (global-set-key (kbd "C-c r") #'rg)
 
-(provide 'init-
+(provide 'init-search)

@@ -8,6 +8,7 @@
 ;; (require 'init-elpa) ; Not needed with straight.el
 ;; (require 'init-mirrors) ; Only needed if you use package.el archives
 (require 'init-editor)
+(require 'init-search)
 (require 'init-auto-complete)
 (require 'init-ido-mode)
 (require 'init-projectile)
