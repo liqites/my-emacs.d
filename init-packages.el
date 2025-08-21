@@ -23,6 +23,7 @@
 (require 'init-treesitter)
 (require 'init-mmm)
 (require 'init-docker)  ;; Docker integration: CLI, Dockerfile, Compose
+(require 'init-solaire)
 
 (provide 'init-packages)
 ;;;init-packages.el ends here
