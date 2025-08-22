@@ -172,22 +172,37 @@
             (when buffer-file-name
               (push buffer-file-name my/file-notify-saved-files))))
 
+;; File change callback: automatically revert buffer on disk change
 (defun my/file-change-callback (event)
-  "Prompt to reload buffer when file changes on disk (EVENT), ignoring Emacs saves."
+  "Automatically reload buffer when file changes on disk (EVENT) without prompting.
+Ignores file saves initiated by Emacs."
   (let ((type (cadr event))
         (file (caddr event)))
     (when (eq type 'changed)
       (if (member file my/file-notify-saved-files)
-          ;; our own save → drop it
           (setq my/file-notify-saved-files
                 (delete file my/file-notify-saved-files))
-        ;; external change → prompt
         (when-let ((buf (get-file-buffer file)))
           (with-current-buffer buf
             (unless (buffer-modified-p)
-              (when (yes-or-no-p
-                     (format "File changed on disk: %s. Reload? " file))
-                (revert-buffer t t t)))))))))
+              (revert-buffer t t t))))))))
+
+;; (defun my/file-change-callback (event)
+;;   "Prompt to reload buffer when file changes on disk (EVENT), ignoring Emacs saves."
+;;   (let ((type (cadr event))
+;;         (file (caddr event)))
+;;     (when (eq type 'changed)
+;;       (if (member file my/file-notify-saved-files)
+;;           ;; our own save → drop it
+;;           (setq my/file-notify-saved-files
+;;                 (delete file my/file-notify-saved-files))
+;;         ;; external change → prompt
+;;         (when-let ((buf (get-file-buffer file)))
+;;           (with-current-buffer buf
+;;             (unless (buffer-modified-p)
+;;               (when (yes-or-no-p
+;;                      (format "File changed on disk: %s. Reload? " file))
+;;                 (revert-buffer t t t)))))))))
 
 (defun my/add-file-watch ()
   "Add a file-notify watch for the current buffer’s file."
